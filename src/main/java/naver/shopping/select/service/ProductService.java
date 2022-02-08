@@ -2,20 +2,19 @@ package naver.shopping.select.service;
 
 import naver.shopping.select.dto.request.ProductMypriceRequestDto;
 import naver.shopping.select.dto.request.ProductRequestDto;
+import naver.shopping.select.dto.response.ProductPagingResponseDto;
 import naver.shopping.select.model.Folder;
 import naver.shopping.select.model.Product;
 import naver.shopping.select.model.User;
 import naver.shopping.select.repository.FolderRepository;
 import naver.shopping.select.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -25,6 +24,9 @@ public class ProductService {
     private final FolderRepository folderRepository;
 
     public static final int MIN_MY_PRICE = 100;
+
+    public static ProductPagingResponseDto productPagingResponseDto = new ProductPagingResponseDto();
+
 
     @Autowired
     public ProductService(ProductRepository productRepository, FolderRepository folderRepository){
@@ -63,33 +65,25 @@ public class ProductService {
         return product;
     }
 
-    // 회원 ID로 등록된 상품 조회
-    public List<Product> getProducts(Long userId) {
-        List<Product> products = productRepository.findAllByUserId(userId);
-        return products;
-    }
-
-    // 관리자용 상품 전체 조회
-    public List<Product> getAllProducts(){
-        List<Product> products = productRepository.findAll();
-        return products;
-    }
-
-    public Page<Product> getProducts(Long userId, int page, int size, String sortBy, boolean isAsc) {
+    public Page<ProductPagingResponseDto> getProducts(Long userId, int page, int size, String sortBy, boolean isAsc) {
 
         Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
         Sort sort = Sort.by(direction, sortBy);
 
         Pageable pageable = PageRequest.of(page,size,sort);
+        Page<Product> products = productRepository.findAllByUserId(userId, pageable);
 
-        return productRepository.findAllByUserId(userId, pageable);
+        return productPagingResponseDto.changeProductToProductDto(products,pageable);
     }
 
-    public Page<Product> getAllProducts(int page, int size, String sortBy, boolean isAsc) {
+    public Page<ProductPagingResponseDto> getAllProducts(int page, int size, String sortBy, boolean isAsc) {
         Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
         Sort sort = Sort.by(direction, sortBy);
         Pageable pageable = PageRequest.of(page,size,sort);
-        return productRepository.findAll(pageable);
+        Page<Product> products = productRepository.findAll(pageable);
+
+        return productPagingResponseDto.changeProductToProductDto(products,pageable);
+
     }
 
     @Transactional
@@ -109,6 +103,7 @@ public class ProductService {
         product.addFolder(folder);
         return product;
     }
+
 }
 
 

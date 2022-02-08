@@ -1,5 +1,6 @@
 package naver.shopping.select.service;
 
+import naver.shopping.select.dto.response.ProductPagingResponseDto;
 import naver.shopping.select.model.Folder;
 import naver.shopping.select.model.Product;
 import naver.shopping.select.model.User;
@@ -23,6 +24,8 @@ public class FolderService {
 
     private final FolderRepository folderRepository;
     private final ProductRepository productRepository;
+
+    public static ProductPagingResponseDto productPagingResponseDto = new ProductPagingResponseDto();
 
     @Autowired
     public FolderService(FolderRepository folderRepository, ProductRepository productRepository) {
@@ -75,12 +78,14 @@ public class FolderService {
         return folderRepository.findAllByUser(user);
     }
 
-    public Page<Product> getProductInFolder(Long folderId, int page, int size, String sortBy, boolean isAsc, User user) {
+    public Page<ProductPagingResponseDto> getProductInFolder(Long folderId, int page, int size, String sortBy, boolean isAsc, User user) {
         Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
         Sort sort = Sort.by(direction, sortBy);
 
         Pageable pageable = PageRequest.of(page,size,sort);
 
-        return productRepository.findAllByUserIdAndFolderList_Id(user.getId(), folderId, pageable);
+        Page<Product> products = productRepository.findAllByUserIdAndFolderList_Id(user.getId(), folderId, pageable);
+
+        return productPagingResponseDto.changeProductToProductDto(products,pageable);
     }
 }

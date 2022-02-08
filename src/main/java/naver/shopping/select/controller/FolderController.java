@@ -1,6 +1,7 @@
 package naver.shopping.select.controller;
 
 import naver.shopping.select.dto.request.FolderRequestDto;
+import naver.shopping.select.dto.response.ProductPagingResponseDto;
 import naver.shopping.select.model.Folder;
 import naver.shopping.select.model.Product;
 import naver.shopping.select.model.User;
@@ -47,7 +48,7 @@ public class FolderController {
     }
 
     @GetMapping("api/folders/{folderId}/products")
-    public Page<Product> getProductsInfolder(
+    public Page<ProductPagingResponseDto> getProductsInfolder(
             @PathVariable Long folderId,
             @RequestParam("page") int page,
             @RequestParam("size") int size,
@@ -56,7 +57,7 @@ public class FolderController {
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ){
         page -= 1;
-        Page<Product> products = folderService.getProductInFolder(folderId, page,size,sortBy,isAsc,userDetails.getUser());
+        Page<ProductPagingResponseDto> products = folderService.getProductInFolder(folderId, page,size,sortBy,isAsc,userDetails.getUser());
         return products;
     }
 
