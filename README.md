@@ -14,7 +14,7 @@ select to shop backend server
 
 # JPA
 Spring Data 활용
-fetch join : N+1 문제 해결
+fetch join : N+1 문제 해결asd
 
 # Spring Security
 Role 부여 User, Admin에 따른 접근 controller가 다름
