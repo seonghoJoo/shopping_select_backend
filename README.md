@@ -14,7 +14,7 @@ select to shop backend server
 
 # JPA
 Spring Data 활용
-fetch join : N+1 문제 해결asd
+fetch join : N+1 문제 해결
 
 # Spring Security
 Role 부여 User, Admin에 따른 접근 controller가 다름
@@ -24,7 +24,7 @@ Role 부여 User, Admin에 따른 접근 controller가 다름
 
 
 # AOP
-1. 유저별 API 활용 시간 체크
+1. API 활용시간 제한을 위해 유저별 API 활용 시간 체크
 2. 예외처리로 인해 500대 에러 아닌 400대 에러로 client에게 다른 값을 받도록 유도할 수 있게 함. 
 
 # Spring Batch
