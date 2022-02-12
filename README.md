@@ -11,6 +11,7 @@ select to shop backend server
 3. 카카오 로그인
 4. AOP
 5. Spring Batch - 최저가 갱신 
+6. Test 코드
 
 # JPA
 Spring Data 활용
@@ -29,3 +30,6 @@ Role 부여 User, Admin에 따른 접근 controller가 다름
 
 # Spring Batch
 최저가 갱신 (개발 예정)
+
+# Test 코드
+TDD
